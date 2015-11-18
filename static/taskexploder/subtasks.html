@@ -34,8 +34,6 @@
     <div class="layout horizontal center">
     <iron-selector selected="0" class="flex">
     <template is="dom-repeat" items="{{tasks.data}}">
-        <!--<paper-card task-id="{{ item.id }}" task-status$="{{ item.status }}" elevation="{{ elevationState(item) }}" animated class="flex">{{item.title}}</paper-card>
-        <input is="iron-input" bind-value="{{ item.title }}"> -->
         <task-element task="{{ item }}"></task-element>
     </template>
         <new-task></new-task>
@@ -82,8 +80,8 @@
         keyBindings: {
             'up': '_upPressed',
             'down': '_downPressed',
-            'delete': '_deletePressed',
-            'shift+delete': '_shiftDeletePressed',
+            'del': '_deletePressed',
+            'shift+del': '_shiftDeletePressed',
             'enter': '_enterPressed',
             'shift+enter': '_shiftEnterPressed'
         },
@@ -106,6 +104,7 @@
         },
 
         _deletePressed: function(event) {
+            console.log("sup");
             // Get current element
             var selected = document.querySelector('iron-selector').selectedItem;
             // Get task id
