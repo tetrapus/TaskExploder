@@ -9,6 +9,10 @@
     <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="static/bower_components/normalize-css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="static/taskexploder/style.css">
+
     <link rel="import" href="static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
     <link rel="import" href="static/bower_components/paper-card/paper-card.html">
     <link rel="import" href="static/bower_components/iron-ajax/iron-ajax.html">
@@ -19,8 +23,6 @@
     <link rel="import" href="static/taskexploder/task-element.html">
     <link rel="import" href="static/taskexploder/new-task.html">
     <link rel="import" href="static/taskexploder/subtasks.html">
-    <link rel="stylesheet" type="text/css" href="static/taskexploder/style.css">
-
     <script>
         window.onbeforeunload = function() {
             if (document.querySelectorAll('[syncing="1"]').length) {
