@@ -1,0 +1,29 @@
+<dom-module id="main-task">
+
+  <template>
+    <style>
+      /* CSS rules for your element */
+      :host {
+        font-size: 3.5rem;
+        padding: 15px 35px;
+      }
+    </style>
+  
+    <!-- local DOM for your element -->
+
+    <div>Today's Tasks</div> 
+  </template>
+
+  <script>
+    Polymer({
+      is: "main-task",
+      properties: {
+        title: {
+          type: String,
+          value: "Loading..."
+        }
+      }
+    });
+  </script>
+
+</dom-module>

@@ -1,0 +1,50 @@
+<dom-module id="new-task">
+    <template>
+        <style>
+            :host {
+                opacity: 0.4;
+                color: #666;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            :host(.iron-selected) {
+                opacity: 1;
+            }
+
+            paper-card {
+                padding: 0px;
+            }
+            paper-input {
+                margin: 0px;
+            }
+
+            /deep/ paper-input-container {
+                padding: 0px;
+            }
+
+            /deep/ .input-content {
+                padding: 10px;
+            }
+
+            /deep/ input {
+                font-size: 1.2rem !important;
+            }
+        </style>
+
+        <paper-card animated><paper-input label="+ Create new task" no-label-float=true></paper-input></paper-card>
+    </template>
+
+<script>
+Polymer({
+    is: "new-task",
+
+    focus: function() {
+        this.querySelector('paper-input').$.input.focus();
+    },
+    blur: function() {
+        this.querySelector('paper-input').$.input.blur();
+    }
+});
+</script>
+</dom-module>

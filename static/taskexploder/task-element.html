@@ -1,0 +1,88 @@
+<dom-module id="task-element">
+    <template>
+        <style>
+            paper-card[task-status="1"] {
+                background-color: #ffee58; /* 400 */
+                color: #fffde7; /* 50 */
+            }
+
+            :host(.iron-selected) paper-card {
+                background: #2196f3;
+                color: #ffffff;
+            }
+
+            :host(.iron-selected) paper-card[task-status="1"] {
+                background-color: #fbc02d; /* 700 */
+                color: #fff9c4; /* 200 */
+            }
+
+            paper-card[syncing="1"] {
+                opacity: 0.75;
+            }
+
+        </style>
+
+
+        <paper-card task-id="{{ task.id }}" task-status$="{{ task.status }}" elevation="{{ elevationState(task.status, raised) }}" animated class="flex">{{task.title}}: {{task.status}}</paper-card>
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+        is: "task-element",
+        elevationState: function(status, raised, init) {
+            if (status == '0') {
+                if (raised) {
+                    return 3;
+                }
+                return 1;
+            }
+            return 0;
+        },
+
+        properties: {
+          task: {
+            type: Object,
+            notify: true
+          },
+          raised: {
+            type: Boolean,
+            value: false,
+            notify: true
+          }
+        },
+
+        complete: function() {
+            this.set("task.status", 1);
+            card = this.querySelector('paper-card');
+            card.setAttribute("syncing", 1);
+            var task = this;
+            $.post("/api/tasks/" + this.task.id, {status: 1})
+                .fail(function() {
+                    // Rollback
+                    task.set('task.status', 0);
+                })
+                .always(function() {
+                    card.setAttribute("syncing", 0);
+                });
+        },
+
+        uncomplete: function() {
+            this.set("task.status", 0);
+            card = this.querySelector('paper-card');
+            card.setAttribute("syncing", 1);
+            var task = this;
+            $.post("/api/tasks/" + this.task.id, {status: 0})
+                .fail(function() {
+                    // Rollback
+                    task.set('task.status', 0);
+                })
+                .always(function() {
+                    card.setAttribute("syncing", 0);
+                });
+        },
+
+    });
+  </script>
+
+</dom-module>

@@ -1,0 +1,168 @@
+<dom-module id="sub-tasks">
+    <template>
+        <style>
+            :host {
+                font-size: 1.2rem;
+                width: 80%;
+                min-width: 500px;
+            }
+
+            /deep/ paper-card {
+                margin: 7px;
+                padding: 10px;
+                width: 100%;
+            }
+
+            @media only screen and (max-width: 514px) {
+                /deep/ paper-card {
+                    margin: 0px;        
+                    padding: 10px;
+                    width: 100%;
+                }
+            }
+
+            @media only screen and (max-width: 514px) {
+                :host {
+                    min-width: 0px;
+                    width: 100%;
+                }
+            }
+        </style>
+  
+    <!-- local DOM for your element -->
+    <iron-ajax auto url="/api/tasks" handle-as="json" last-response="{{tasks}}"></iron-ajax>
+    <div class="layout horizontal center">
+    <iron-selector selected="0" class="flex">
+    <template is="dom-repeat" items="{{tasks.data}}">
+        <!--<paper-card task-id="{{ item.id }}" task-status$="{{ item.status }}" elevation="{{ elevationState(item) }}" animated class="flex">{{item.title}}</paper-card>
+        <input is="iron-input" bind-value="{{ item.title }}"> -->
+        <task-element task="{{ item }}"></task-element>
+    </template>
+        <new-task></new-task>
+    </iron-selector>
+    </div>
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+        is: "sub-tasks",
+        behaviors: [
+            Polymer.IronA11yKeysBehavior
+        ],
+        listeners: {
+            'iron-select': '_selected',
+            'iron-deselect': '_deselected'
+        },
+
+        properties: {
+          tasks: {
+            type: Object,
+            notify: true
+          },
+          newTask: {
+            type: Object,
+            value: {'title': ''}
+          },
+          boundKeys: {
+            type: Array,
+            value: function() {
+              return Object.keys(this.keyBindings).join(' ').split(' ');
+            }
+          },
+
+          keyEventTarget: {
+            type: Object,
+            value: function() {
+              return document.body;
+            }
+          }
+        },
+
+        keyBindings: {
+            'up': '_upPressed',
+            'down': '_downPressed',
+            'delete': '_deletePressed',
+            'shift+delete': '_shiftDeletePressed',
+            'enter': '_enterPressed',
+            'shift+enter': '_shiftEnterPressed'
+        },
+        // Computed bindings
+        placeholder: function(title) {
+            if (title) {
+                return title;
+            } else {
+                return '+ Create subtask';
+            }
+        },
+
+        // Keypress bindings
+        _upPressed: function(event) {
+            document.querySelector('iron-selector').selectPrevious();
+        },
+
+        _downPressed: function(event) {
+            document.querySelector('iron-selector').selectNext();
+        },
+
+        _deletePressed: function(event) {
+            // Get current element
+            var selected = document.querySelector('iron-selector').selectedItem;
+            // Get task id
+            var task_id = selected.task.id;
+            if (task_id) {
+                document.querySelector('iron-selector').selectNext();
+                selected.complete();
+            }
+              
+        },
+
+        _shiftDeletePressed: function(event) {
+            // Get current element
+            var selected = document.querySelector('iron-selector').selectedItem;
+            // Get task id
+            var task_id = selected.task.id;
+            if (task_id && selected.task.status == 1) {
+                document.querySelector('iron-selector').selectNext();
+                selected.uncomplete();
+            }
+              
+        },
+        
+        _enterPressed: function(event) {
+            selector = document.querySelector('iron-selector');
+            task = selector.selectedItem;
+            if (task.tagName === 'NEW-TASK') {
+                input = task.querySelector('paper-input');
+                // Create a new task.
+                this.push('tasks.data', {"title": input.value, 'status': 0});
+                input.value = "";
+                selector.selected += 1;
+            }
+        },
+
+        _shiftEnterPressed: function(event) {
+            this.pop("tasks.data");
+        },
+
+        // Selection events
+        _selected: function(event) {
+            element = event.detail.item;
+            if (element.tagName === 'NEW-TASK') {
+                element.focus();
+            }
+            element.raised = true;
+        },
+
+        _deselected: function(event) {
+            element = event.detail.item;
+            if (element.tagName === 'NEW-TASK') {
+                element.blur();
+            }
+            element.raised = false;
+        }
+
+    });
+  </script>
+
+</dom-module>
