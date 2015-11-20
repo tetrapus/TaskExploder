@@ -27,6 +27,7 @@
     "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#~1.0.8",
     "iron-input": "PolymerElements/iron-input#~1.0.6",
     "paper-input": "PolymerElements/paper-input#~1.1.0",
-    "normalize-css": "normalize.css#~3.0.3"
+    "normalize-css": "normalize.css#~3.0.3",
+    "paper-toast": "PolymerElements/paper-toast#~1.0.0"
   }
 }

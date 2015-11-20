@@ -19,13 +19,16 @@
     <link rel="import" href="static/bower_components/iron-selector/iron-selector.html">
     <link rel="import" href="static/bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
     <link rel="import" href="static/bower_components/paper-input/paper-input.html">
+    <link rel="import" href="static/bower_components/paper-toast/paper-toast.html">
     <link rel="import" href="static/taskexploder/main-task.html">
     <link rel="import" href="static/taskexploder/task-element.html">
     <link rel="import" href="static/taskexploder/new-task.html">
+    <link rel="import" href="static/taskexploder/ajax-toast.html">
     <link rel="import" href="static/taskexploder/subtasks.html">
     <script>
         window.onbeforeunload = function() {
-            if (document.querySelectorAll('[syncing="1"]').length) {
+            if (document.querySelectorAll('[syncing="1"]').length
+                || document.querySelector('input').value) {
                 return "Your todo list has not finished synchronizing with the server.";    
             }
         }
@@ -35,5 +38,6 @@
     <main-task title="{{account.username}}">
     </main-task>
     <sub-tasks></sub-tasks>
+    <ajax-toast></ajax-toast>
 </body>
 </html>

@@ -82,16 +82,7 @@
             'down': '_downPressed',
             'del': '_deletePressed',
             'shift+del': '_shiftDeletePressed',
-            'enter': '_enterPressed',
-            'shift+enter': '_shiftEnterPressed'
-        },
-        // Computed bindings
-        placeholder: function(title) {
-            if (title) {
-                return title;
-            } else {
-                return '+ Create subtask';
-            }
+            'enter': '_enterPressed'
         },
 
         // Keypress bindings
@@ -104,7 +95,6 @@
         },
 
         _deletePressed: function(event) {
-            console.log("sup");
             // Get current element
             var selected = document.querySelector('iron-selector').selectedItem;
             // Get task id
@@ -133,15 +123,18 @@
             task = selector.selectedItem;
             if (task.tagName === 'NEW-TASK') {
                 input = task.querySelector('paper-input');
-                // Create a new task.
-                this.push('tasks.data', {"title": input.value, 'status': 0});
-                input.value = "";
-                selector.selected += 1;
+                points = task.querySelector('.new-task-points');
+                if (input.value) {
+                    // Create a new task.
+                    this.push('tasks.data', {
+                        "title": input.value,
+                        'status': 0,
+                        'points': points.value
+                    });
+                    input.value = "";
+                    selector.selected += 1;
+                }
             }
-        },
-
-        _shiftEnterPressed: function(event) {
-            this.pop("tasks.data");
         },
 
         // Selection events

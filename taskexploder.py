@@ -1,9 +1,8 @@
-import json
 import time
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+     abort, render_template, flash, jsonify
 import dao.accounts
 import dao.tasks
 from dao.types import Task, User
@@ -30,7 +29,7 @@ def list_tasks():
         abort(401)
     tasks = dao.tasks.get_subtasks(g.db, session['user_id'], request.args.get('parent'))
     entries = [t.to_dict() for t in tasks]
-    return json.dumps({"status": "success", "data": entries})
+    return jsonify({"status": "success", "data": entries})
 
 @app.route('/api/tasks', methods=['POST'])
 def new_task():
@@ -40,9 +39,9 @@ def new_task():
     try:
         title = request.form['title']
         if len(title) > 140:
-            return json.dumps({"status": "error", "error": "Title must be under 140 characters."})
+            return jsonify({"status": "error", "error": "Title must be under 140 characters."})
     except KeyError:
-        return json.dumps({"status": "error", "error": "Must supply title."})
+        return jsonify({"status": "error", "error": "Must supply title."})
     parent_id = request.form.get('parent_id') # TODO: Validate me
     points = request.form.get('points')
     status = request.form.get('status')
@@ -59,8 +58,8 @@ def new_task():
         g.db.add(task)
         g.db.commit()
     except:
-        return json.dumps({"status": "error", "error": "Task creation failed."})
-    return json.dumps({"status": "success", "result": task.to_dict()})
+        return jsonify({"status": "error", "error": "Task creation failed."})
+    return jsonify({"status": "success", "result": task.to_dict()})
 
 @app.route('/api/tasks/<task_id>', methods=['POST'])
 def update_entry(task_id):
@@ -79,7 +78,7 @@ def update_entry(task_id):
     updates = {k: request.form[v] for k, v in fields.items() if v in request.form}
 
     if 'title' in updates and len(updates['title']) > 140:
-        return json.dumps({"status": "error", "error": "Title must be under 140 characters."})
+        return jsonify({"status": "error", "error": "Title must be under 140 characters."})
     # TODO: Validate parent
 
     results = g.db.query(
@@ -92,9 +91,9 @@ def update_entry(task_id):
     )
     g.db.commit()
     if results:
-        return json.dumps({"status": "success"})
+        return jsonify({"status": "success"})
     else:
-        return json.dumps({"status": "error"})
+        return jsonify({"status": "error"})
 
 # def delete_entry():
 #     pass
@@ -102,17 +101,17 @@ def update_entry(task_id):
 @app.route('/api/account', methods=['POST'])
 def create_account():
     account = dao.accounts.create_user(g.db, request.form['username'], request.form['password'])
-    return json.dumps({"status": "success", "result": account.to_dict()})
+    return jsonify({"status": "success", "result": account.to_dict()})
 
 @app.route('/api/account', methods=['GET'])
 def get_account():
     account = dao.accounts.from_username(g.db, request.args['username'])
     if account is None:
-        return json.dumps({
+        return jsonify({
             'status': 'error',
             'message': 'User does not exist.'
         })
-    return json.dumps({
+    return jsonify({
         "status": "success", 
         "result": account.to_dict()
     })

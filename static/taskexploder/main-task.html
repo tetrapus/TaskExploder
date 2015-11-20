@@ -9,18 +9,17 @@
       }
     </style>
   
-    <!-- local DOM for your element -->
-
-    <div>Today's Tasks</div> 
+    <div>{{ task.title }}</div> 
   </template>
 
   <script>
     Polymer({
       is: "main-task",
       properties: {
-        title: {
-          type: String,
-          value: "Loading..."
+        task: {
+          type: Object,
+          value: {"title": "Tasks"},
+          notify: true
         }
       }
     });
