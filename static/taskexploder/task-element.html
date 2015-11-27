@@ -3,7 +3,6 @@
         <style>
             paper-card {
                 padding: 0px;
-                width: 100%;
             }
 
             paper-card[task-status="1"] {
@@ -69,6 +68,7 @@
     // element registration
     Polymer({
         is: "task-element",
+
         elevationState: function(status, raised, init) {
             if (status == '0') {
                 if (raised) {

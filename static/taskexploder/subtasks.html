@@ -5,23 +5,23 @@
                 font-size: 1.2rem;
                 width: 80%;
                 min-width: 500px;
+                margin-right: auto;
+                margin-left: auto;
             }
 
             /deep/ paper-card {
                 margin: 7px;
                 padding: 10px;
-                width: 100%;
             }
 
-            @media only screen and (max-width: 514px) {
+            @media only screen and (max-width: 528px) {
                 /deep/ paper-card {
                     margin: 0px;        
                     padding: 10px;
-                    width: 100%;
                 }
             }
 
-            @media only screen and (max-width: 514px) {
+            @media only screen and (max-width: 528px) {
                 :host {
                     min-width: 0px;
                     width: 100%;
@@ -31,14 +31,12 @@
   
     <!-- local DOM for your element -->
     <iron-ajax auto url="/api/tasks" handle-as="json" last-response="{{tasks}}"></iron-ajax>
-    <div class="layout horizontal center">
-    <iron-selector selected="0" class="flex">
+    <iron-selector selected="0" class="layout vertical flex">
     <template is="dom-repeat" items="{{tasks.data}}">
-        <task-element task="{{ item }}"></task-element>
+        <task-element task="{{ item }}" animated></task-element>
     </template>
         <new-task></new-task>
     </iron-selector>
-    </div>
   </template>
 
   <script>
@@ -46,11 +44,13 @@
     Polymer({
         is: "sub-tasks",
         behaviors: [
-            Polymer.IronA11yKeysBehavior
+            Polymer.IronA11yKeysBehavior,
+            Polymer.NeonAnimationRunnerBehavior
         ],
         listeners: {
             'iron-select': '_selected',
-            'iron-deselect': '_deselected'
+            'iron-deselect': '_deselected',
+            'dom-change': 'load_animation'
         },
 
         properties: {
@@ -74,6 +74,22 @@
             value: function() {
               return document.body;
             }
+          },
+
+          animationConfig: {
+            value: function() {
+                return {
+                    'entry': {
+                        'name': 'cascaded-animation',
+                        'animation': 'fade-in-animation',
+                        'timing': {'duration': 200}
+                    }
+                }
+            }
+          },
+          loaded: {
+            type: Boolean,
+            value: false
           }
         },
 
@@ -132,6 +148,7 @@
                         'points': points.value
                     });
                     input.value = "";
+                    task.querySelector('.new-task-points').value = "";
                     selector.selected += 1;
                 }
             }
@@ -152,6 +169,15 @@
                 element.blur();
             }
             element.raised = false;
+        },
+
+        // Animations
+        load_animation: function(event) {
+            //if (!this.loaded) {
+                this.animationConfig.entry.nodes = this.querySelectorAll('task-element');
+                this.playAnimation('entry');
+                this.loaded = true;
+            //}
         }
 
     });

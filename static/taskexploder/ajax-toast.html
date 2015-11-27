@@ -1,0 +1,52 @@
+<dom-module id="ajax-toast">
+
+  <template>
+    <style>
+      /* CSS rules for your element */
+      :host {
+        font-size: 3.5rem;
+        padding: 15px 35px;
+        z-index: 10;
+        position: absolute;
+      }
+      .retry {
+        color: #eeff41;
+        margin: 10px;
+      }
+      .resync {
+        color: #FF6E40;
+        margin: 10px;
+      }
+    </style>
+    <paper-toast text="{{ text }}">
+        <span role="button" tabindex="0" class=retry on-click="retry">Retry</span>
+        <span role="button" tabindex="0" class=resync on-click="resync">Resync</span>
+
+    </paper-toast>
+  </template>
+
+  <script>
+    Polymer({
+      is: "ajax-toast",
+      properties: {
+        text: {
+          type: String
+        },
+        retry: {
+          type: Function
+        }
+      },
+
+      resync: function() {
+        document.querySelector('iron-ajax').generateRequest();
+      },
+
+      show: function(message, retry) {
+        this.text = message;
+        this.retry = retry;
+        this.querySelector('paper-toast').show();
+      }
+    });
+  </script>
+
+</dom-module>

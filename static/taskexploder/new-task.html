@@ -60,7 +60,7 @@
 
         <paper-card animated class="horizontal layout">
             <paper-input class="new-task-title" label="+ Create new task" no-label-float=true></paper-input>
-            <paper-input class="new-task-points" no-label-float=true></paper-input>
+            <paper-input class="new-task-points" no-label-float=true pattern="([1-9][0-9]?[0-9]?)?" prevent-invalid-input=true></paper-input>
         </paper-card>
     </template>
 
@@ -72,7 +72,10 @@ Polymer({
         this.querySelector('paper-input').$.input.focus();
     },
     blur: function() {
-        this.querySelector('paper-input[focused]').$.input.blur();
+        input = this.querySelector('paper-input[focused]')
+        if (input) {
+            input.$.input.blur();
+        }
     }
 });
 </script>
