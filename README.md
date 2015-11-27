@@ -20,8 +20,8 @@ Tasks:
     Delete deletes element (done task)
         -> Shift+delete marks undone
     Enter undos delete (undo)
-        -> Delete confirms delete
-        -> Shift+delete marks undone          
+        -> Delete confirms delete        
+        -> Shift+delete marks undone
     Start typing to amend, or tab to set field
 
 Hold shift to re-order.
