@@ -3,6 +3,15 @@
 
 A nested agile-inspired todo list with story points.
 
+## Installation
+* Clone the repo.
+* Install python 3
+* Install dependencies with `pip install -r requirements.txt`
+* Initialise the database using `alembic upgrade head`
+* Modify `config.py` with appropriate configuration variables
+* Set the TASKEXPLODER_CONFIG environment variable to point to the config (`export TASKEXPLODER_CONFIG=config.py`)
+* Run the server with `python taskexploder.py`
+
 ## UI controls
 
 Tasks:
