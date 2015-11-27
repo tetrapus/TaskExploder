@@ -12,6 +12,11 @@ A nested agile-inspired todo list with story points.
 * Set the TASKEXPLODER_CONFIG environment variable to point to the config (`export TASKEXPLODER_CONFIG=config.py`)
 * Run the server with `python taskexploder.py`
 
+## Development
+TaskExploder uses pivotal tracker for project management. The following tools are suggested:
+* virtualenvwrapper
+* Git Pivotal Tracker integration (https://github.com/nebhale/git-pivotal-tracker-integration)
+
 ## UI controls
 
 Tasks:
