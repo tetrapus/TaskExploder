@@ -30,5 +30,9 @@
     "normalize-css": "normalize.css#~3.0.3",
     "paper-toast": "PolymerElements/paper-toast#~1.0.0",
     "neon-animation": "PolymerElements/neon-animation#~1.0.8"
+  },
+  "resolutions": {
+    "polymer": "^1.2.0",
+    "webcomponentsjs": "^0.7.18"
   }
 }
