@@ -9,3 +9,7 @@ def get_subtasks(session, user, parent=None):
     ).order_by(
         Task.idx
     ).all()
+
+def task_put(session, task):
+    session.add(task)
+    session.commit()
