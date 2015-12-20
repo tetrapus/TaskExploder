@@ -1,31 +1,16 @@
 from calendar import timegm
 
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.orderinglist import ordering_list
 
-Base = declarative_base()
+from . import Base
+
 
 def epoch_of(timestamp):
     if timestamp is not None:
         return timegm(timestamp.timetuple())
 
-
-class User(Base):
-    __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True)
-    username = Column(String)
-    password = Column(String)
-    salt = Column(String)
-
-    def to_dict(self):
-        return {
-            "type": "User",
-            "id": self.id, 
-            "username": self.username
-        }
 
 class TaskStatus(object):
     ACTIVE = 0
@@ -33,6 +18,7 @@ class TaskStatus(object):
     DELETED = 2
     PENDING = 3
     EXPIRED = 4 # Expired is a variant of active, with the same semantics.
+
 
 class Task(Base):
     __tablename__ = 'tasks'
