@@ -1,5 +1,6 @@
-<dom-module id="ajax-toast">
+<link rel="import" href="static/bower_components/paper-toast/paper-toast.html">
 
+<dom-module id="ajax-toast">
   <template>
     <style>
       :host {
@@ -17,16 +18,17 @@
         margin: 10px;
       }
     </style>
-    <paper-toast text="{{ text }}">
-        <span role="button" tabindex="0" class=retry on-click="retry">Retry</span>
-        <span role="button" tabindex="0" class=resync on-click="resync">Resync</span>
 
+    <paper-toast text="{{ text }}">
+      <span role="button" tabindex="0" class=retry on-click="retry">Retry</span>
+      <span role="button" tabindex="0" class=resync on-click="resync">Resync</span>
     </paper-toast>
   </template>
 
   <script>
     Polymer({
       is: "ajax-toast",
+
       properties: {
         text: {
           type: String

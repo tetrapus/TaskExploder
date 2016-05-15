@@ -1,82 +1,84 @@
+<link rel="import" href="static/bower_components/paper-input/paper-input.html">
+
 <dom-module id="new-task">
-    <template>
-        <style>
-            paper-card {
-                padding: 0px;
-                opacity: 0.4;
-                color: #666;
-            }
+  <template>
+    <style>
+      paper-card {
+        padding: 0px;
+        opacity: 0.4;
+        color: #666;
+      }
 
-            :host(.iron-selected) paper-card {
-                opacity: 1;
-            }
+      :host(.iron-selected) paper-card {
+        opacity: 1;
+      }
 
-            paper-input {
-                display: inline-block;
-            }
+      paper-input {
+        display: inline-block;
+      }
 
-            .new-task-title {
-                @apply(--layout-flex);
-            }
+      .new-task-title {
+        @apply(--layout-flex);
+      }
 
-            .new-task-points {
-                width: 43px;
-                text-align: center;
-            }
+      .new-task-points {
+        width: 43px;
+        text-align: center;
+      }
 
-            :host(.iron-selected) .new-task-points {
-                background-color: #0D47A1;
-            }
+      :host(.iron-selected) .new-task-points {
+        background-color: #0D47A1;
+      }
 
-            /deep/ .new-task-points input[value="1"] {  
-                background-color: #000;
-            }
+      /deep/ .new-task-points input[value="1"] {
+        background-color: #000;
+      }
 
-            /deep/ paper-input-container {
-                padding: 0px;
-            }
+      /deep/ paper-input-container {
+        padding: 0px;
+      }
 
-            /deep/ .new-task-title .input-content {
-                padding: 10px;
-            }
+      /deep/ .new-task-title .input-content {
+        padding: 10px;
+      }
 
-            /deep/ .new-task-points .input-content {
-                padding: 10px 0px;
-            }
+      /deep/ .new-task-points .input-content {
+        padding: 10px 0px;
+      }
 
-            /deep/ input {
-                font-size: 1.2rem !important;
-            }
+      /deep/ input {
+        font-size: 1.2rem !important;
+      }
 
-            /deep/ .new-task-points input {
-                color: #000000 !important;
-            }
+      /deep/ .new-task-points input {
+        color: #000000 !important;
+      }
 
-            :host(.iron-selected) /deep/ .new-task-points input {
-                color: #ffffff !important;
-            }
+      :host(.iron-selected) /deep/ .new-task-points input {
+        color: #ffffff !important;
+      }
+    </style>
 
-        </style>
+    <paper-card animated class="horizontal layout">
+      <paper-input class="new-task-title" label="+ Create new task" no-label-float=true></paper-input>
+      <paper-input class="new-task-points" no-label-float=true pattern="([1-9][0-9]?[0-9]?)?" prevent-invalid-input=true></paper-input>
+    </paper-card>
+  </template>
 
-        <paper-card animated class="horizontal layout">
-            <paper-input class="new-task-title" label="+ Create new task" no-label-float=true></paper-input>
-            <paper-input class="new-task-points" no-label-float=true pattern="([1-9][0-9]?[0-9]?)?" prevent-invalid-input=true></paper-input>
-        </paper-card>
-    </template>
+  <script>
+    Polymer({
+      is: "new-task",
 
-<script>
-Polymer({
-    is: "new-task",
-
-    focus: function() {
+      focus: function() {
         this.querySelector('paper-input').$.input.focus();
-    },
-    blur: function() {
+      },
+
+      blur: function() {
         input = this.querySelector('paper-input[focused]')
         if (input) {
-            input.$.input.blur();
+          input.$.input.blur();
         }
-    }
-});
-</script>
+      }
+    });
+  </script>
 </dom-module>

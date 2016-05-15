@@ -1,11 +1,11 @@
 
 
 body {
-    background-color: #ffeb3b;
-    font-family: 'Roboto', sans-serif;
+  background-color: #ffeb3b;
+  font-family: 'Roboto', sans-serif;
 }
 
 paper-toast {
-    right: 12px;
-    left: auto !important;
+  right: 12px;
+  left: auto !important;
 }

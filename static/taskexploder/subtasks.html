@@ -2,188 +2,186 @@
 <link rel="import" href="new-task.html">
 
 <dom-module id="sub-tasks">
-    <template>
-        <style>
-            :host {
-                font-size: 1.2rem;
-                width: 80%;
-                min-width: 500px;
-                margin-right: auto;
-                margin-left: auto;
-                display: inherit;
-            }
+  <template>
+    <style>
+      :host {
+        font-size: 1.2rem;
+        width: 80%;
+        min-width: 500px;
+        margin-right: auto;
+        margin-left: auto;
+        display: inherit;
+      }
 
-            /deep/ paper-card {
-                margin: 7px;
-                padding: 10px;
-            }
+      /deep/ paper-card {
+        margin: 7px;
+        padding: 10px;
+      }
 
-            @media only screen and (max-width: 528px) {
-                /deep/ paper-card {
-                    margin: 0px;
-                    padding: 10px;
-                }
-            }
+      @media only screen and (max-width: 528px) {
+        /deep/ paper-card {
+          margin: 0px;
+          padding: 10px;
+        }
+      }
 
-            @media only screen and (max-width: 528px) {
-                :host {
-                    min-width: 0px;
-                    width: 100%;
-                }
-            }
-        </style>
+      @media only screen and (max-width: 528px) {
+        :host {
+          min-width: 0px;
+          width: 100%;
+        }
+      }
+    </style>
 
     <iron-ajax auto url="/api/tasks" handle-as="json" last-response="{{tasks}}"></iron-ajax>
     <iron-selector selected="0" class="layout vertical flex">
-    <template is="dom-repeat" items="{{tasks.data}}">
+      <template is="dom-repeat" items="{{tasks.data}}">
         <task-element class="task-item" task="{{ item }}" animated></task-element>
-    </template>
-        <new-task class="task-item" animated></new-task>
+      </template>
+      <new-task class="task-item" animated></new-task>
     </iron-selector>
   </template>
 
   <script>
-    // element registration
     Polymer({
-        is: "sub-tasks",
-        behaviors: [
-            Polymer.IronA11yKeysBehavior,
-            Polymer.NeonAnimationRunnerBehavior
-        ],
-        listeners: {
-            'iron-select': '_selected',
-            'iron-deselect': '_deselected',
-            'dom-change': 'load_animation'
+      is: "sub-tasks",
+
+      behaviors: [
+        Polymer.IronA11yKeysBehavior,
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+
+      listeners: {
+        'iron-select': '_selected',
+        'iron-deselect': '_deselected',
+        'dom-change': 'load_animation'
+      },
+
+      properties: {
+        tasks: {
+          type: Object,
+          notify: true
         },
-
-        properties: {
-          tasks: {
-            type: Object,
-            notify: true
-          },
-          newTask: {
-            type: Object,
-            value: {'title': ''}
-          },
-          boundKeys: {
-            type: Array,
-            value: function() {
-              return Object.keys(this.keyBindings).join(' ').split(' ');
-            }
-          },
-
-          keyEventTarget: {
-            type: Object,
-            value: function() {
-              return document.body;
-            }
-          },
-
-          animationConfig: {
-            value: function() {
-                return {
-                    'entry': {
-                        'name': 'cascaded-animation',
-                        'animation': 'fade-in-animation',
-                        'timing': {'duration': 200}
-                    }
-                }
-            }
-          },
-          loaded: {
-            type: Boolean,
-            value: false
+        newTask: {
+          type: Object,
+          value: {'title': ''}
+        },
+        boundKeys: {
+          type: Array,
+          value: function() {
+            return Object.keys(this.keyBindings).join(' ').split(' ');
           }
         },
 
-        keyBindings: {
-            'up': '_upPressed',
-            'down': '_downPressed',
-            'del': '_deletePressed',
-            'shift+del': '_shiftDeletePressed',
-            'enter': '_enterPressed'
+        keyEventTarget: {
+          type: Object,
+          value: function() {
+            return document.body;
+          }
         },
 
-        // Keypress bindings
-        _upPressed: function(event) {
-            document.querySelector('iron-selector').selectPrevious();
-        },
-
-        _downPressed: function(event) {
-            document.querySelector('iron-selector').selectNext();
-        },
-
-        _deletePressed: function(event) {
-            // Get current element
-            var selected = document.querySelector('iron-selector').selectedItem;
-            // Get task id
-            var task_id = selected.task.id;
-            if (task_id) {
-                document.querySelector('iron-selector').selectNext();
-                selected.complete();
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': {
+                'name': 'cascaded-animation',
+                'animation': 'fade-in-animation',
+                'timing': {'duration': 200},
+              }
             }
-
+          }
         },
 
-        _shiftDeletePressed: function(event) {
-            // Get current element
-            var selected = document.querySelector('iron-selector').selectedItem;
-            // Get task id
-            var task_id = selected.task.id;
-            if (task_id && selected.task.status == 1) {
-                document.querySelector('iron-selector').selectNext();
-                selected.uncomplete();
-            }
-
-        },
-
-        _enterPressed: function(event) {
-            selector = document.querySelector('iron-selector');
-            task = selector.selectedItem;
-            if (task.tagName === 'NEW-TASK') {
-                input = task.querySelector('paper-input');
-                points = task.querySelector('.new-task-points');
-                if (input.value) {
-                    // Create a new task.
-                    this.push('tasks.data', {
-                        "title": input.value,
-                        'status': 0,
-                        'points': points.value
-                    });
-                    input.value = "";
-                    task.querySelector('.new-task-points').value = "";
-                    selector.selected += 1;
-                }
-            }
-        },
-
-        // Selection events
-        _selected: function(event) {
-            element = event.detail.item;
-            if (element.tagName === 'NEW-TASK') {
-                element.focus();
-            }
-            element.raised = true;
-        },
-
-        _deselected: function(event) {
-            element = event.detail.item;
-            if (element.tagName === 'NEW-TASK') {
-                element.blur();
-            }
-            element.raised = false;
-        },
-
-        // Animations
-        load_animation: function(event) {
-            //if (!this.loaded) {
-                this.animationConfig.entry.nodes = this.querySelectorAll('.task-item');
-                this.playAnimation('entry');
-                this.loaded = true;
-            //}
+        loaded: {
+          type: Boolean,
+          value: false,
         }
+      },
 
+      keyBindings: {
+        'up': '_upPressed',
+        'down': '_downPressed',
+        'del': '_deletePressed',
+        'shift+del': '_shiftDeletePressed',
+        'enter': '_enterPressed'
+      },
+
+      // Keypress bindings
+      _upPressed: function(event) {
+        document.querySelector('iron-selector').selectPrevious();
+      },
+
+      _downPressed: function(event) {
+        document.querySelector('iron-selector').selectNext();
+      },
+
+      _deletePressed: function(event) {
+        // Get current element
+        var selected = document.querySelector('iron-selector').selectedItem;
+        // Get task id
+        var task_id = selected.task.id;
+        if (task_id) {
+          document.querySelector('iron-selector').selectNext();
+          selected.complete();
+        }
+      },
+
+      _shiftDeletePressed: function(event) {
+        // Get current element
+        var selected = document.querySelector('iron-selector').selectedItem;
+        // Get task id
+        var task_id = selected.task.id;
+        if (task_id && selected.task.status == 1) {
+          document.querySelector('iron-selector').selectNext();
+          selected.uncomplete();
+        }
+      },
+
+      _enterPressed: function(event) {
+        selector = document.querySelector('iron-selector');
+        task = selector.selectedItem;
+        if (task.tagName === 'NEW-TASK') {
+          input = task.querySelector('paper-input');
+          points = task.querySelector('.new-task-points');
+          if (input.value) {
+            // Create a new task.
+            this.push('tasks.data', {
+              "title": input.value,
+              'status': 0,
+              'points': points.value,
+            });
+            input.value = "";
+            task.querySelector('.new-task-points').value = "";
+            selector.selected += 1;
+          }
+        }
+      },
+
+      // Selection events
+      _selected: function(event) {
+        element = event.detail.item;
+        if (element.tagName === 'NEW-TASK') {
+          element.focus();
+        }
+        element.raised = true;
+      },
+
+      _deselected: function(event) {
+        element = event.detail.item;
+        if (element.tagName === 'NEW-TASK') {
+          element.blur();
+        }
+        element.raised = false;
+      },
+
+      // Animations
+      load_animation: function(event) {
+        //if (!this.loaded) {
+          this.animationConfig.entry.nodes = this.querySelectorAll('.task-item');
+          this.playAnimation('entry');
+          this.loaded = true;
+        //}
+      }
     });
   </script>
-
 </dom-module>

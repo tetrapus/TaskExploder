@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<head>
+  <head>
     <title>Task Exploder!</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,19 +21,17 @@
     <link rel="import" href="static/bower_components/iron-ajax/iron-ajax.html">
     <link rel="import" href="static/bower_components/iron-selector/iron-selector.html">
     <link rel="import" href="static/bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
-    <link rel="import" href="static/bower_components/paper-input/paper-input.html">
-    <link rel="import" href="static/bower_components/paper-toast/paper-toast.html">
     <link rel="import" href="static/taskexploder/taskexploder-app.html">
     <script>
-        window.onbeforeunload = function() {
-            if (document.querySelectorAll('[syncing="1"]').length
-                || document.querySelector('input').value) {
-                return "Your todo list has not finished synchronizing with the server.";
-            }
+      window.onbeforeunload = function() {
+        if (document.querySelectorAll('[syncing="1"]').length
+          || document.querySelector('input').value) {
+          return "Your todo list has not finished synchronizing with the server.";
         }
+      }
     </script>
-</head>
-<body class="fullbleed layout vertical">
+  </head>
+  <body class="fullbleed layout vertical">
     <taskexploder-app></taskexploder-app>
-</body>
+  </body>
 </html>

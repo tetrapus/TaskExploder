@@ -1,7 +1,6 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="user-control">
-
   <template>
     <style>
       :host {
@@ -11,9 +10,8 @@
         color: #212121;
         position: absolute;
         right: 0px;
-
-    }
-    .navbutton {
+      }
+      .navbutton {
         display: inline-block;
         margin-left: 15px;
         padding: 2px 8px;
@@ -24,31 +22,35 @@
         transition: opacity .1s ease-in-out;
         position: relative;
         top: -1px;
-    }
-    .navbutton:hover {
+      }
+      .navbutton:hover {
         opacity: 1;
-    }
+      }
     </style>
+
     <iron-ajax auto url="/api/whoami" handle-as="json" last-response="{{me}}"></iron-ajax>
     <span class="greeting">Hello, {{ me.data.username }}!</span>
     <paper-button class="navbutton" id="nav-logout">
-        <div id="nav-logout-text">LOGOUT</div>
+      <div id="nav-logout-text">LOGOUT</div>
     </paper-button>
   </template>
 
   <script>
     Polymer({
       is: "user-control",
+
       listeners: {
-          'nav-logout.tap': '_logout',
+        'nav-logout.tap': '_logout',
       },
+
       properties: {
         me: {
           type: Object,
           value: {data: {username: "handsome"}},
-          notify: true
+          notify: true,
         }
       },
+
       _logout: function(evt) {
           window.location = "/logout";
       },

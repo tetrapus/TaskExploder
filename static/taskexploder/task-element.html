@@ -1,159 +1,158 @@
 <dom-module id="task-element">
-    <template>
-        <style>
-            paper-card {
-                padding: 0px;
-            }
+  <template>
+    <style>
+      paper-card {
+        padding: 0px;
+      }
 
-            paper-card[task-status="1"] {
-                background-color: #ffee58; /* 400 */
-                color: #fffde7; /* 50 */
-            }
+      paper-card[task-status="1"] {
+        background-color: #ffee58; /* 400 */
+        color: #fffde7; /* 50 */
+      }
 
-            :host(.iron-selected) paper-card {
-                background: #2196f3;
-                color: #ffffff;
-            }
+      :host(.iron-selected) paper-card {
+        background: #2196f3;
+        color: #ffffff;
+      }
 
-            :host(.iron-selected) paper-card[task-status="1"] {
-                background-color: #fbc02d; /* 700 */
-                color: #fff9c4; /* 200 */
-            }
+      :host(.iron-selected) paper-card[task-status="1"] {
+        background-color: #fbc02d; /* 700 */
+        color: #fff9c4; /* 200 */
+      }
 
-            paper-card[syncing="1"] {
-                opacity: 0.75;
-            }
+      paper-card[syncing="1"] {
+        opacity: 0.75;
+      }
 
-            .task-name {
-                display: inline-block;
-                padding: 10px;
-                @apply(--layout-flex);
-            }
-            .task-points {
-                display: inline-block;
-                right: 0px;
-                padding: 10px 0px;
-                border-left-width: 1px;
-                background-color: #0D47A1; /* 900 */
-                color: #ffffff;
-                width: 43px;
-                text-align: center;
-            }
+      .task-name {
+        display: inline-block;
+        padding: 10px;
+        @apply(--layout-flex);
+      }
+      .task-points {
+        display: inline-block;
+        right: 0px;
+        padding: 10px 0px;
+        border-left-width: 1px;
+        background-color: #0D47A1; /* 900 */
+        color: #ffffff;
+        width: 43px;
+        text-align: center;
+      }
 
-            :host(.iron-selected) .task-points {
-                /*background-color: #1E88E5; /* 600 */
-            }
+      :host(.iron-selected) .task-points {
+        /*background-color: #1E88E5; /* 600 */
+      }
 
-            paper-card[task-status="1"] .task-points {
-                background-color: #FFF176; /* 300 */
-            }
+      paper-card[task-status="1"] .task-points {
+        background-color: #FFF176; /* 300 */
+      }
 
-            :host(.iron-selected) paper-card[task-status="1"]  .task-points {
-                background-color: #F9A825; /* 800 */
-            }
-        </style>
+      :host(.iron-selected) paper-card[task-status="1"]  .task-points {
+        background-color: #F9A825; /* 800 */
+      }
+    </style>
 
-
-        <paper-card task-id="{{ task.id }}" task-status$="{{ task.status }}" elevation="{{ elevationState(task.status, raised) }}" animated class="horizontal layout">
-            <div class="task-name">{{ task.title }}</div>
-            <template is="dom-if" if="{{ task.points }}">
-                <div class="task-points">{{ task.points }}</div>
-            </template>
-        </paper-card>
-        <ajax-toast></ajax-toast>
+    <paper-card task-id="{{ task.id }}" task-status$="{{ task.status }}" elevation="{{ elevationState(task.status, raised) }}" animated class="horizontal layout">
+      <div class="task-name">{{ task.title }}</div>
+      <template is="dom-if" if="{{ task.points }}">
+        <div class="task-points">{{ task.points }}</div>
+      </template>
+    </paper-card>
+    <ajax-toast></ajax-toast>
 
   </template>
 
   <script>
-    // element registration
-    Polymer({
-        is: "task-element",
+  Polymer({
+    is: "task-element",
 
-        elevationState: function(status, raised, init) {
-            if (status == '0') {
-                if (raised) {
-                    return 3;
-                }
-                return 1;
-            }
-            return 0;
-        },
+    elevationState: function(status, raised, init) {
+      if (status == '0') {
+        if (raised) {
+          return 3;
+        }
+        return 1;
+      }
+      return 0;
+    },
 
-        properties: {
-          task: {
-            type: Object,
-            notify: true
-          },
-          raised: {
-            type: Boolean,
-            value: false,
-            notify: true
-          }
-        },
+    properties: {
+      task: {
+        type: Object,
+        notify: true,
+      },
+      raised: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      }
+    },
 
-        ready: function() {
-            // Hack: If task has no id, create one.
-            this.addTask();
-        },
+    ready: function() {
+      // Hack: If task has no id, create one.
+      this.addTask();
+    },
 
-        addTask: function() {
-            if (this.task.id === undefined) {
-                card = this.querySelector('paper-card');
-                card.setAttribute("syncing", 1);
-                $.post(
-                    "/api/tasks",
-                    this.task
-                ).fail((function() {
-                    toast = this.querySelector('ajax-toast');
-                    toast.show("Could not create task.", this.addTask.bind(this));
-                    // TODO: Enter retry state
-                }).bind(this)
-                ).done((function(data) {
-                    if (data.status === 'success') {
-                        this.set('task', data.result);
-                    } else {
-                        toast = this.querySelector('ajax-toast');
-                        toast.show("Error: " + data.error, this.addTask.bind(this));
-                        // TODO: Set error state
-                    }
-                }).bind(this)
-                ).always(function() {
-                    card.setAttribute('syncing', 0);
-                });
-            }
-        },
+    addTask: function() {
+      if (this.task.id === undefined) {
+        card = this.querySelector('paper-card');
+        card.setAttribute("syncing", 1);
+        $.post("/api/tasks", this.task)
+          .fail(
+            (function() {
+              toast = this.querySelector('ajax-toast');
+              toast.show("Could not create task.", this.addTask.bind(this));
+              // TODO: Enter retry state
+            }).bind(this)
+          )
+          .done(
+            (function(data) {
+              if (data.status === 'success') {
+                this.set('task', data.result);
+              } else {
+                toast = this.querySelector('ajax-toast');
+                toast.show("Error: " + data.error, this.addTask.bind(this));
+                // TODO: Set error state
+              }
+            }).bind(this)
+          )
+          .always(function() {
+            card.setAttribute('syncing', 0);
+          });
+      }
+    },
 
-        complete: function() {
-            this.set("task.status", 1);
-            card = this.querySelector('paper-card');
-            card.setAttribute("syncing", 1);
-            var task = this;
-            $.post("/api/tasks/" + this.task.id, {status: 1})
-                .fail(function() {
-                    // Rollback
-                    task.set('task.status', 0);
-                })
-                .always(function() {
-                    card.setAttribute("syncing", 0);
-                });
-        },
+    complete: function() {
+      this.set("task.status", 1);
+      card = this.querySelector('paper-card');
+      card.setAttribute("syncing", 1);
+      var task = this;
+      $.post("/api/tasks/" + this.task.id, {status: 1})
+        .fail(function() {
+          // Rollback
+          task.set('task.status', 0);
+        })
+        .always(function() {
+          card.setAttribute("syncing", 0);
+        });
+    },
 
-        uncomplete: function() {
-            this.set("task.status", 0);
-            card = this.querySelector('paper-card');
-            card.setAttribute("syncing", 1);
-            var task = this;
-            $.post("/api/tasks/" + this.task.id, {status: 0})
-                .fail(function() {
-                    // Rollback
-                    task.set('task.status', 0);
-                })
-                .always(function() {
-                    card.setAttribute("syncing", 0);
-                });
-        },
-
-    });
+    uncomplete: function() {
+      this.set("task.status", 0);
+      card = this.querySelector('paper-card');
+      card.setAttribute("syncing", 1);
+      var task = this;
+      $.post("/api/tasks/" + this.task.id, {status: 0})
+        .fail(function() {
+          // Rollback
+          task.set('task.status', 0);
+        })
+        .always(function() {
+          card.setAttribute("syncing", 0);
+        });
+    },
+  });
   </script>
 
 </dom-module>
