@@ -48,7 +48,7 @@
 
       behaviors: [
         Polymer.IronA11yKeysBehavior,
-        Polymer.NeonAnimationRunnerBehavior
+        Polymer.NeonAnimationRunnerBehavior,
       ],
 
       listeners: {
@@ -179,7 +179,6 @@
         //if (!this.loaded) {
           this.animationConfig.entry.nodes = this.querySelectorAll('.task-item');
           this.playAnimation('entry');
-          this.loaded = true;
         //}
       }
     });
