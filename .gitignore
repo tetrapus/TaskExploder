@@ -1,3 +1,4 @@
 static/bower_components
 tasks.db
 *.pyc
+venv

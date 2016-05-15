@@ -2,7 +2,9 @@ from flask import Blueprint, request, session, flash, redirect, url_for, render_
 
 from ..model.users import User
 
+
 blueprint = Blueprint("Pages", __name__)
+
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -13,17 +15,21 @@ def login():
             session['user_id'] = account.id
             session['user'] = account.to_dict()
             flash('You were logged in')
-            return redirect(url_for('index'))
+            return redirect(url_for('Pages.index'))
     return render_template('login.html', error=error)
+
 
 @blueprint.route('/logout')
 def logout():
     session.pop('user_id', None)
     session.pop('user', None)
     flash('You were logged out')
-    return redirect(url_for('login'))
+    return redirect(url_for('Pages.login'))
+
 
 @blueprint.route('/')
 def index():
-    account = session.get('user')
-    return render_template('index.html', account=account)
+    user = session.get('user')
+    if not user:
+        redirect(url_for('Pages.login'))
+    return render_template('index.html', user=user)

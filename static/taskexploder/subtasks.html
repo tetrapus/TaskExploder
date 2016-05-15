@@ -1,3 +1,6 @@
+<link rel="import" href="task-element.html">
+<link rel="import" href="new-task.html">
+
 <dom-module id="sub-tasks">
     <template>
         <style>
@@ -7,6 +10,7 @@
                 min-width: 500px;
                 margin-right: auto;
                 margin-left: auto;
+                display: inherit;
             }
 
             /deep/ paper-card {
@@ -16,7 +20,7 @@
 
             @media only screen and (max-width: 528px) {
                 /deep/ paper-card {
-                    margin: 0px;        
+                    margin: 0px;
                     padding: 10px;
                 }
             }
@@ -28,14 +32,13 @@
                 }
             }
         </style>
-  
-    <!-- local DOM for your element -->
+
     <iron-ajax auto url="/api/tasks" handle-as="json" last-response="{{tasks}}"></iron-ajax>
     <iron-selector selected="0" class="layout vertical flex">
     <template is="dom-repeat" items="{{tasks.data}}">
-        <task-element task="{{ item }}" animated></task-element>
+        <task-element class="task-item" task="{{ item }}" animated></task-element>
     </template>
-        <new-task></new-task>
+        <new-task class="task-item" animated></new-task>
     </iron-selector>
   </template>
 
@@ -119,7 +122,7 @@
                 document.querySelector('iron-selector').selectNext();
                 selected.complete();
             }
-              
+
         },
 
         _shiftDeletePressed: function(event) {
@@ -131,9 +134,9 @@
                 document.querySelector('iron-selector').selectNext();
                 selected.uncomplete();
             }
-              
+
         },
-        
+
         _enterPressed: function(event) {
             selector = document.querySelector('iron-selector');
             task = selector.selectedItem;
@@ -174,7 +177,7 @@
         // Animations
         load_animation: function(event) {
             //if (!this.loaded) {
-                this.animationConfig.entry.nodes = this.querySelectorAll('task-element');
+                this.animationConfig.entry.nodes = this.querySelectorAll('.task-item');
                 this.playAnimation('entry');
                 this.loaded = true;
             //}

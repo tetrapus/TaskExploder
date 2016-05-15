@@ -30,8 +30,10 @@
     "normalize-css": "normalize.css#~3.0.3",
     "paper-toast": "PolymerElements/paper-toast#~1.0.0",
     "neon-animation": "PolymerElements/neon-animation#~1.0.8",
-    "jquery": "~2.1.4"
-},
+    "jquery": "~2.1.4",
+    "paper-button": "PolymerElements/paper-button#^1.0.11",
+    "paper-spinner": "PolymerElements/paper-spinner#^1.1.1"
+  },
   "resolutions": {
     "polymer": "^1.2.0",
     "webcomponentsjs": "^0.7.18"

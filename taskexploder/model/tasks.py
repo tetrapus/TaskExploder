@@ -17,7 +17,7 @@ class TaskStatus(object):
     DONE = 1
     DELETED = 2
     PENDING = 3
-    EXPIRED = 4 # Expired is a variant of active, with the same semantics.
+    EXPIRED = 4  # Expired is a variant of active, with the same semantics.
 
 
 class Task(Base):

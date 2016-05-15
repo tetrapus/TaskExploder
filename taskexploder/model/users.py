@@ -20,7 +20,7 @@ class User(Base):
     def to_dict(self):
         return {
             "type": "User",
-            "id": self.id, 
+            "id": self.id,
             "username": self.username
         }
 
