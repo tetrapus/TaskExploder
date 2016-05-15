@@ -113,7 +113,7 @@
                 this.set('task', data.result);
               } else {
                 toast = this.querySelector('ajax-toast');
-                toast.show("Error: " + data.error, this.addTask.bind(this));
+                toast.show("Error: " + data.message, this.addTask.bind(this));
                 // TODO: Set error state
               }
             }).bind(this)
