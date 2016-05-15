@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import session, abort, g, request, jsonify
 
 from ..model.tasks import Task
@@ -39,7 +41,8 @@ def new_task():
             parent_id=parent_id,
             points=points,
             status=status,
-            idx=idx
+            idx=idx,
+            created=datetime.now(),
         )
         g.db.add(task)
         g.db.commit()
