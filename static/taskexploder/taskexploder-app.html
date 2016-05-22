@@ -1,12 +1,30 @@
+<link rel="import" href="colors.html">
 <link rel="import" href="main-header.html">
 <link rel="import" href="subtasks.html">
 <link rel="import" href="ajax-toast.html">
 
 <dom-module id="taskexploder-app">
   <template>
-    <main-header></main-header>
-    <sub-tasks></sub-tasks>
-    <ajax-toast></ajax-toast>
+    <style include="colors"></style>
+    <style>
+      :host {
+        background-color: #e0e0e0;
+        font-family: 'Roboto', sans-serif;
+        height: 100%;
+      }
+
+      paper-toast {
+        right: 12px;
+        left: auto !important;
+      }
+
+    </style>
+
+    <div class="taskexploder fullbleed layout vertical">
+      <main-header></main-header>
+      <sub-tasks></sub-tasks>
+      <ajax-toast></ajax-toast>
+    </body>
   </template>
 
   <script>

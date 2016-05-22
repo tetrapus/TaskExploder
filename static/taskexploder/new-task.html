@@ -3,10 +3,14 @@
 <dom-module id="new-task">
   <template>
     <style>
+      :host {
+        --paper-input-container-focus-color: var(--color-900);
+      }
+
       paper-card {
         padding: 0px;
         opacity: 0.4;
-        color: #666;
+        color: var(--color-deselected-text);
       }
 
       :host(.iron-selected) paper-card {
@@ -27,11 +31,7 @@
       }
 
       :host(.iron-selected) .new-task-points {
-        background-color: #0D47A1;
-      }
-
-      /deep/ .new-task-points input[value="1"] {
-        background-color: #000;
+        background-color: var(--color-900);
       }
 
       /deep/ paper-input-container {
@@ -50,12 +50,12 @@
         font-size: 1.2rem !important;
       }
 
-      /deep/ .new-task-points input {
-        color: #000000 !important;
+      /deep/ .new-task-points input{
+        --paper-input-container-input-color: var(--color-text);
       }
 
       :host(.iron-selected) /deep/ .new-task-points input {
-        color: #ffffff !important;
+        color: var(--color-main-text) !important;
       }
     </style>
 

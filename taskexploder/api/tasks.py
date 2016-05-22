@@ -127,10 +127,6 @@ def update_entry(task_id):
         return jsonify({"status": "error"})
 
 
-def delete_entry():
-    pass
-
-
 def register(blueprint):
     blueprint.route('/tasks', methods=['GET'])(list_tasks)
 
